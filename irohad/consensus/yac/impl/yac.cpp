@@ -25,17 +25,17 @@ namespace iroha {
 
       template <typename T>
       std::string cryptoError(const T &votes) {
-        std::string result =
-            "Crypto verification failed for message.\n Votes: ";
-        result += logger::to_string(votes, [](const auto &vote) {
-          std::string result = "(Public key: ";
-          result += vote.signature.pubkey.to_hexstring();
-          result += ", Signature: ";
-          result += vote.signature.signature.to_hexstring();
-          result += ")\n";
-          return result;
-        });
-        return result;
+        std::stringstream ss;
+        ss << "Crypto verification failed for message." << std::endl
+           << "Votes: " << std::endl
+           << logger::to_string(votes, [](const auto &vote) {
+                std::stringstream ss;
+                ss << "(Public key: " << vote.signature.pubkey.to_hexstring()
+                   << ", Signature: " << vote.signature.signature.to_hexstring()
+                   << ")" << std::endl;
+                return ss.str();
+              });
+        return ss.str();
       }
 
       template <typename T>
